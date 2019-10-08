@@ -1,0 +1,51 @@
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="userModalTitle">Create New User</h5>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="alert.show" class="alert alert-danger">
+        {{alert.msg}}
+      </div>
+      <form method="post">
+        <div class="form-group row">
+          <label for="inputEmail" class="col-sm-4 col-form-label">Email</label>
+          <div class="col-sm-8 pl-0">
+            <input type="text" name="inputEmail" id="inputEmail" class="form-control" [(ngModel)]="inputEmail">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="inputName" class="col-sm-4 col-form-label">Username</label>
+          <div class="col-sm-8 pl-0">
+            <input type="text" name="inputName" id="inputName" class="form-control" [(ngModel)]="inputName">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="inputPassword" class="col-sm-4 col-form-label">Password</label>
+          <div class="col-sm-8 pl-0">
+            <input type="password" name="inputPassword" class="form-control" id="inputPassword" [(ngModel)]="inputPassword">
+          </div>
+          
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-4">Special role?</div>
+          <div class="col-sm-8">
+            <div>
+              <input type="checkbox" name="superAdmin" id="superAdmin" [(ngModel)]="superAdmin">
+              <label for="superAdmin" class="form-check-label pl-2 pr-3">Super Admin</label>
+              <input type="checkbox" name="groupAdmin" id="groupAdmin" [(ngModel)]="groupAdmin">
+              <label for="groupAdmin" class="form-check-label pl-2">Group Admin</label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="reset()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="addUser()">Create</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.form-login {
+    width: 100%;
+    max-width: 20em;
+    padding: 1em;
+    margin: auto;
+}
+
+.formClass{
+  margin: auto;
+  margin-top:10em;
+  width:20%;
+  padding:1em;
+  background-color: white;
+}
+
+.glowing-border {
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 1em #9ecaed;
+}

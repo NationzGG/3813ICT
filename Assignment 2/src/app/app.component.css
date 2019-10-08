@@ -1,0 +1,61 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  padding: 48px 0 0;
+}
+.sidebar-sticky {
+  position: sticky;
+  position: -webkit-sticky;
+}
+.avatar {
+  position: relative;
+  width: 75px;
+  height: 75px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 5px solid rgba(255, 255, 255, 0.8);
+}
+
+.upload {
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  cursor: pointer;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 5px solid rgba(255, 255, 255, 0.8);
+  
+  transition: all 0.3s ease;
+}
+.upload:hover {
+  transform: scale(1.05);
+	cursor: pointer;
+}
+.upload:hover .image{
+  opacity: 0.5;
+}
+.uploading {
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  width: 75px;
+  height: 75px;
+}
+.image_upload_input {
+  width: 65px;
+  height: 75px;
+  cursor: pointer;
+  opacity: 0;
+}
+.image {
+  max-width: auto;
+  max-height: 100%;
+}
+.buttonUpload{
+  margin:1em;
+  align:centre;
+}

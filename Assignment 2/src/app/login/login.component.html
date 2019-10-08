@@ -1,0 +1,23 @@
+<div class="formClass glowing-border">
+
+<form method="POST" class="form-login pt-5">
+    <!-- Site logo/Name -->
+    <h3 class="text-center">Myspace</h3>
+    <!-- Error Message -->
+    <div *ngIf="alert" class="alert alert-danger">
+        {{alertMsg}}
+    </div>
+    <!-- Username Input-->
+    <div class="form-group">
+        <label for="userName">User Name</label>
+        <input type="text" name="userName" id="userName" [(ngModel)]="user.userName" class="form-control">
+    </div>
+    <!-- Password Input -->
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" [(ngModel)]="user.password">
+    </div>
+    <!-- Login Button -->
+    <button type="submit" (click)="login()" class="btn btn-lg btn-primary btn-block mt-3">Login</button>
+</form>
+</div>

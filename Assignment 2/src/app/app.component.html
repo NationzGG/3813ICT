@@ -1,0 +1,86 @@
+<div class="container-fluid">
+    <ng-container *ngIf="loggedIn; else notLogin">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
+                <div class="sidebar-sticky">
+                    <div class="pl-4 d-flex flex-row flex-wrap">
+                        <!--User Avatar -->
+                        <div>
+                            <!--Display Avatar -->
+                            <div class="avatar">
+                                <img src="{{userAvatar}}" alt="" class="image">
+                            </div>
+                            <!--Upload Avatar -->
+                            <div class="upload">
+                                <form method="post" enctype="multipart/form-data">
+                                    <input type="file" name="" id="" accept="image/*" class="image_upload_input" (change)="changeAvatar($event.target.files)">
+                                </form>
+                            </div>
+                            <!--Upload Spinner -->
+                            <div *ngIf="uploading" class="spinner-border text-success uploading" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <!--Dashboard Link -->
+                        <h2 class="text-light mr-4 align-self-end pl-2">
+                            <a routerLink="/dashboard" class="text-white">{{userData.userName}}</a>
+                        </h2>
+                    </div>
+                    <!-- Confirm Upload -->
+                    <div class="pl-4 mt-2" *ngIf="confirmUpload">
+                        <button type="button" class="btn btn-success btn-sm" (click)="upload()">Confirm</button>
+                    </div>
+                   
+                    <!--User Role Badge -->
+                    <div class="pl-4 pt-2">
+                        <span class="badge badge-info badge-pill">{{superAdminBadge}}</span>
+                        <span class="badge badge-info badge-pill">{{groupAdminBadge}}</span>
+                    </div>
+                    <!--Logout -->
+                    <div class="pt-2">
+                        <button type="submit" (click)="logout()" class="btn rounded-pill btn-outline-info btn-block">Logout</button>
+                    </div>
+
+                    <!--Group List -->
+                    <div class="mt-5">
+                        <h5 class="text-white bg-dark pl-4 border-bottom border-top border-white">Group list</h5>
+                        <div class="btn-group-vertical btn-block">
+                            <p class="alert alert-light w-100 text-center" *ngIf="groupData.length == 0">Not in any group yet</p>
+                            <div *ngFor="let group of groupData; " class="btn-block">
+                                <button data-toggle="collapse" [attr.data-target]="'#'+group.groupName" aria-expanded="false" [attr.aria-controls]="group.groupName" class="btn btn-dark btn-block">
+                  <div class="d-flex justify-content-between">
+                    <p class="pl-5 mb-0">{{group.groupName.split('-').join(' ')}}</p>
+                    <p class="pr-5 mb-0">&#9776;</p>
+                  </div>
+
+                </button>
+                                <div class="collapse" [attr.id]="group.groupName">
+                                    <div class="card pt-2">
+                                        <div class="btn-group">
+                                            <button type="submit" class="btn btn-outline-info" (click)="displayGroupDetail(group.groupName)">Go to group page</button>
+                                        </div>
+                                        <div class="card-body">
+                                            <!--Channel List -->
+                                            <h5 class="card-title text-center">Channel list</h5>
+                                            <div class="list-group list-group-flush">
+                                                <p>{{ group.groupChannel.length == 0 ? 'No channel avaliable' : '' }}</p>
+                                                <button *ngFor="let channel of group.groupChannel" type="submit" (click)="toChannel(group.groupName,channel)" class="btn btn-outline-dark list-group-item">{{channel}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="col-md-9 ml-sm-auto col-lg-10 pl-0">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+
+    </ng-container>
+    <ng-template #notLogin>
+        <router-outlet></router-outlet>
+    </ng-template>
+</div>

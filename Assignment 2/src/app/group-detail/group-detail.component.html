@@ -1,0 +1,115 @@
+<div class="pt-4">
+    <!-- Remove Group -->
+    <div class="d-flex align-items-center">
+        <h1 class="mr-5 ml-4">{{groupName}}</h1>
+        <button type="submit" *ngIf="lv0Permission" (click)="removeGroup()" class="btn btn-danger h-75">Remove Group</button>
+    </div>
+    <!-- Nav -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item pl-3"><a routerLink="/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{groupName}}</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-around">
+        <!-- Channel List -->
+        <div class="card channel border-info rounded-left shadow bg-white rounded mt-4">
+            <div class="card-header d-flex align-items-center bg-info">
+                <h5 class="mr-5 mb-0 text-white text-center">Channel List</h5>
+                <!-- Add Channel -->
+                <div *ngIf="lv1Permission">
+                    <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#channelModal" (click)="addChannel()">Add channel</button>
+                </div>
+            </div>
+            <!--Channel Detail -->
+            <div class="card-body">
+                <h5 class="card-title">Group Channels</h5>
+                <div class="d-flex flex-wrap justify-content-start">
+                    <p>{{ channelList.length == 0 ? 'No channels avalible' : '' }}</p>
+                    <button *ngFor="let channel of channelList" type="submit" class="ml-1 mr-1 mt-1 mb-1 btn btn-outline-dark" (click)="toChannel(channel)">{{channel}}</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- User List -->
+        <div class="card user border-info rounded-left shadow bg-white rounded mt-4">
+            <div class="card-header bg-info">
+                <div class="d-flex align-items-center justify-content-center">
+                    <h5 class="mb-0 mr-2 text-white text-center">User List</h5>
+                    <!-- Edit User -->
+                    <div>
+                        <button *ngIf="lv0Permission" type="submit" (click)="editUserMode()" class="btn btn-outline-warning">Edit</button>
+                        <button *ngIf="editMode" type="submit" (click)="cancel()" class="btn btn-outline-danger">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Add User -->
+                <div *ngIf="editMode" class="mt-3">
+                    <button type="button" class="btn btn-primary btn-block btn-light" data-toggle="modal" data-target="#addUserModal" (click)="getUserNotInGp()">
+            Add user to this group
+          </button>
+                </div>
+            </div>
+            <!-- Error Message -->
+            <div class="card-body">
+                <div *ngIf="alert.show" class="alert alert-danger">
+                    {{alert.msg}}
+                </div>
+                <h5 class="card-title">Group Users</h5>
+                <div class="d-flex flex-wrap justify-content-start">
+
+                    <div *ngFor="let user of userList" class="border-left border-right pl-4 pr-4 border-info">
+                        <div *ngIf="editMode">
+                            <input type="checkbox" name="selectedUser" id="selectedUser" class="form-check-input" [(ngModel)]="user.selected">
+                        </div>
+                        <label for="selectedUser" class="form-check-label">{{user.userName}}
+              <span class="badge badge-warning badge-pill">{{user.groupAdmin ? 'GA' : ''}}</span>
+              <span class="badge  badge-info badge-pill">{{user.groupAssist ? 'Assist' : ''}}</span>
+            </label>
+                    </div>
+
+                    <div *ngIf="editMode" class="w-100">
+                        <!-- Assign Group Assis -->
+                        <button *ngIf="lv0Permission" (click)="addAssist()" class="btn btn-outline-info btn-block">Assign selected GroupAssist</button>
+                        <!-- Remove From Group -->
+                        <button (click)="editUser('remove')" class="btn btn-danger btn-block">Remove selected users</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="channelModal" tabindex="-1" role="dialog" aria-labelledby="channelModalTitle" aria-hidden="true">
+    <app-add-channel></app-add-channel>
+</div>
+
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- Add Users -->
+                <h5 class="modal-title" id="addUserModalTitle">Add Users</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <p>Select the users you would like to add to the group</p>
+                <p>{{ userLiNotInGp.length == 0 ? 'All users already in groups' : '' }}</p>
+                <div *ngFor="let newUser of userLiNotInGp" class="pl-4">
+                    <input type="checkbox" name="selectedUser" id="selectedUser" class="form-check-input" [(ngModel)]="newUser.selected">
+                    <label for="selectedUser" class="form-check-label">{{newUser.userName}}</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- Cancel -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelAddUser()">Close</button>
+                <!-- Add -->
+                <button type="button" class="btn btn-primary" (click)="editUser('add')">Add</button>
+            </div>
+        </div>
+    </div>
+</div>

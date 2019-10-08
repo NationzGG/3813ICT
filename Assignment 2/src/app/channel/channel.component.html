@@ -1,0 +1,207 @@
+<div class="row channelContainer">
+  <div class="col-11 pr-0">
+
+    <div class="displayMessageContainer">
+      <!-- top section sticky -->
+      <div class="containerTop pt-3">
+        <!-- Header  -->
+        <div class="d-flex flex-row justify-content-center">
+            <button *ngIf="lv0Permission" type="submit" (click)="removeChannel()" class="btn btn-outline-danger align-self-center mr-3">Remove Channel</button>
+            <h1 class="text-center pr-3">{{channelName}}</h1>
+            <button type="button" class="btn btn-outline-danger align-self-center" (click)="backToGroup()">Leave chat</button>
+            
+          </div>
+  
+          <!-- message input area -->
+          <div class="messageInputContainer">
+  
+            <!-- message input -->
+            <form method="post" class="formPost">
+              <div *ngIf="chatAlert.show" class="alert alert-danger">
+                {{chatAlert.msg}}
+              </div>
+              <div class="input-group chatInputGroup" [class.justify-content-between]="image">
+                  
+                <!-- upload image button -->
+                <div class="pt-0 pb-0 uploadButtonContainer">
+                  <div class="uploadImage">
+                    <ng-container *ngIf="image; else uploadImageButton">
+                      <button *ngIf="image" type="button" class="btn btn-danger uploadButton" (click)="cancelImageUpload()">-</button>
+                    </ng-container>
+                    <ng-template #uploadImageButton>
+                      <div class="uploadChatImage">
+                        <form method="post" enctype="multipart/form-data">
+                          <input type="file" name="" id="" accept="image/*" class="image_upload_input" (change)="imageSelected($event.target.files)">
+                        </form>
+                      </div>
+                      <button type="button" class="btn btn-success uploadButton pl-0 pr-0 pt-0 pb-0">
+                        <img src="assets/imageIcon.png" alt="" class="icon">
+                      </button>
+                    </ng-template>
+                  </div>
+                </div>
+                <!-- image preview -->
+                <ng-container *ngIf="image; else message">
+                  <div class="imagePreview d-flex justify-content-center">
+                    <img src="{{imagePreview}}" alt="" class="imagePreviewImage">
+                  </div>
+                </ng-container>
+                <!-- message -->
+                <ng-template #message>
+                  <input type="text" name="chatInput" id="chatInput" class="form-control chatInput" [(ngModel)]="chatInput">
+                </ng-template>
+  
+                <button type="submit" class="btn btn-primary" (click)="sendMsg()">Send</button>
+              </div>
+            </form>
+          </div>
+      </div>
+      
+
+
+      <!-- display message area -->
+      <div class="messageContainer">
+        <div *ngFor="let data of messages">
+          <ng-container *ngIf="data.announcement; else normalMessage">
+            <div class="announcement text-center pt-2 pb-2 mt-1 mb-3">{{data.message}}</div>
+          </ng-container>
+          <ng-template #normalMessage>
+            <div class="d-flex flex-row ml-5">
+              <!-- avatar & user name -->
+              <div class="user">
+                <div class="avatar">
+                  <img src="{{data.userAvatar}}" class="avatarImage">
+                </div>
+                <p>{{data.userName}}</p>
+              </div>
+              <ng-container *ngIf="data.image; else textMessage">
+                <!-- message bubble with picture -->
+                <div class="image_bubble mt-1 mb-1 align-self-start" [class.selfImageBubble]="data.selfMessage">
+                  <div class="chatImageContainer ml-4">
+                    <img src="{{data.imagePath}}" alt="" class="chatImage">
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #textMessage>
+                <!-- message bubble -->
+                <div class="message_bubble mt-1 mb-1 align-self-start" [class.selfMsgBubble]="data.selfMessage">
+                  <p class="message_text pl-4 mb-0" [class.selfMsgText]="data.selfMessage">{{data.message}}</p>
+                </div>
+              </ng-template>
+
+            </div>
+          </ng-template>
+        </div>
+        <div *ngIf="hasHistory">
+          <div *ngFor="let historyData of historyMessages">
+
+            <div class="d-flex flex-row ml-5">
+              <!-- avatar & user name -->
+              <div class="user">
+                <div class="avatar">
+                  <img src="{{historyData.userAvatar}}" class="avatarImage">
+                </div>
+                <p>{{historyData.userName}}</p>
+              </div>
+              <ng-container *ngIf="historyData.image; else textMessage">
+                <!-- message bubble with picture -->
+                <div class="image_bubble mt-1 mb-1 align-self-start" [class.selfImageBubble]="historyData.selfMessage">
+                  <div class="chatImageContainer ml-4">
+                    <img src="{{historyData.imagePath}}" alt="" class="chatImage">
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #textMessage>
+                <!-- message bubble -->
+                <div class="message_bubble mt-1 mb-1 align-self-start" [class.selfMsgBubble]="historyData.selfMessage">
+                  <p class="message_text pl-4 mb-0" [class.selfMsgText]="historyData.selfMessage">{{historyData.message}}</p>
+                </div>
+              </ng-template>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="addUserChModal" tabindex="-1" role="dialog" aria-labelledby="addUserChModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addUserChModalTitle">Add user</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div *ngIf="alert.show" class="alert alert-danger">
+              {{alert.msg}}
+            </div>
+            <p>Select users you would like to add</p>
+            <p>{{ userListNIC.length == 0 ? 'All group users are in the channel' : '' }}</p>
+            <div *ngFor="let newUser of userListNIC" class="pl-4">
+              <input type="checkbox" name="selectedUser" id="selectedUser" class="form-check-input" [(ngModel)]="newUser.selected">
+              <label for="selectedUser" class="form-check-label">{{newUser.userName}}</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="close()">Close</button>
+            <button type="button" class="btn btn-primary" (click)="addOrRemoveUser('add')">Add Users</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left sidebar -->
+  <div class="col-1 sidebar bg-dark">
+    <div class="sidebar-sticky">
+      <h3 class="text-white text-center">Users</h3>
+      <div *ngIf="lv1Permission">
+        <button *ngIf="!editMode" type="submit" (click)="editUser()" class="btn btn-block btn-outline-light">Edit</button>
+        <button *ngIf="editMode" type="submit" (click)="cancel()" class="btn btn-block btn-outline-warning">Cancel</button>
+      </div>
+      <div *ngIf="alert.show" class="alert alert-danger">
+        {{alert.msg}}
+      </div>
+
+      <div class="pr-4 pl-4">
+        <div>
+          <p class="text-white">{{ userList.length == 0 ? 'No user in this channel yet' : '' }}</p>
+          <div *ngFor="let user of userList" class="mt-2 mb-2">
+            <ng-container *ngIf="user.userName != currentUser">
+              <input *ngIf="editMode" type="checkbox" name="selectedUser" id="selectedUser" class="form-check-input inputCheck" [(ngModel)]="user.selected">
+            </ng-container>
+            <div class="d-flex flex-column justify-content-center">
+              <div class="avatar align-self-center">
+                  <img src="{{user.fullAvatarPath}}" class="avatarImage">
+                </div>
+                <label for="selectedUser" class="form-check-label text-white align-self-center">{{user.userName}}</label>
+            </div>
+            
+          </div>
+
+        </div>
+
+
+      </div>
+      <div *ngIf="editMode" class="mt-4">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#addUserChModal" (click)="getUserLsNotInCh()">
+          Add user
+        </button>
+        <button (click)="addOrRemoveUser('remove')" class="btn btn-outline-danger btn-block">Remove selected users</button>
+
+      </div>
+
+
+    </div>
+
+
+
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="channelModalTitle">Create New Channel</h5>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="alert.show" class="alert alert-danger">
+        {{alert.msg}}
+      </div>
+      
+      <form method="post">
+        <div class="form-group row">
+          <label for="channelName" class="col-sm-4 col-form-label">Channel Name</label>
+          <div class="col-sm-8 pl-0">
+            <input type="text" name="channelName" id="channelName" class="form-control" [(ngModel)]="name">
+          </div>
+        </div>
+      </form>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="reset()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="addChannel()">Create</button>
+    </div>
+  </div>
+</div>

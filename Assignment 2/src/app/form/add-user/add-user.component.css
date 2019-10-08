@@ -1,0 +1,6 @@
+::ng-deep .mat-radio-outer-circle {
+  display: none;
+}
+::ng-deep .mat-radio-inner-circle {
+  display: none;
+}

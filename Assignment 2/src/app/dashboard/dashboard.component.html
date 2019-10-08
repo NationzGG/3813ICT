@@ -1,0 +1,115 @@
+<div class="pt-4 ml-4">
+  <h2>Live Chat Application - Dashboard</h2>
+  <h3>Welcome {{currentUser}}</h3>
+  <div class="card border-left-1 border-info rounded-left shadow bg-white rounded mt-4">
+    <div class="card-header d-flex align-items-center bg-transparent">
+      <h5 class="mr-5 mb-0 text-info">Group List</h5>
+      <!-- Button trigger modal -->
+      <button *ngIf="specialUser" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#groupModal">+ New group</button>
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title">Following are your groups</h5>
+      <div class="d-flex flex-wrap justify-content-start">
+        <p>{{ groupList.length == 0 ? 'No groups yet' : '' }}</p>
+        <div>
+          <button *ngFor="let group of groupList" type="submit" class="ml-1 mr-1 mt-1 mb-1 btn btn-outline-dark" (click)="displayGroupDetail(group.groupName)">{{group.groupName.split('-').join(' ')}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="superAdmin">
+
+    <div class="card mt-5 border-left-1 border-info rounded-left shadow bg-white rounded">
+      <div class="card-header d-flex align-items-center bg-transparent">
+        <h5 class="mr-5 mb-0 text-info">User List</h5>
+        <!-- Button trigger modal -->
+        <button class="btn btn-outline-success" data-toggle="modal" data-target="#userModal">+ Add User</button>
+        <button *ngIf="superAdmin" type="submit" (click)="editUser()" class="btn btn-outline-warning ml-2" data-toggle="modal" data-target="#editUserModal">Edit</button>
+       
+      </div>
+
+      <div class="card-body">
+        <h5 class="card-title">Following are current existing users</h5>
+        <div class="d-flex flex-wrap justify-content-start">
+          <p>{{ userList.length == 0 ? 'No other users yet' : '' }}</p>
+          <div *ngFor="let user of userList" class="border-left border-right pl-4 pr-4 border-info">
+            <div class="text-center">
+              {{user.userName}}
+              <span *ngIf="user.role0 || user.role1" class="pl-1">
+                <span class="badge badge-info badge-pill">{{user.role0}}</span>
+                <span class="badge badge-info badge-pill">{{user.role1}}</span>
+              </span>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="groupModal" tabindex="-1" role="dialog" aria-labelledby="groupModalTitle" aria-hidden="true">
+  <app-add-group></app-add-group>
+</div>
+
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalTitle" aria-hidden="true">
+  <app-add-user></app-add-user>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered editUserModalContainer" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserModalTitle">Edit user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="alert" class="alert alert-danger">
+          {{alertMsg}}
+        </div>
+        <button *ngIf="!editMode" type="submit" (click)="editUser()" class="btn btn-info ml-2 btn-block">Edit Again</button>
+        <div *ngIf="editMode" class="mb-4 d-flex justify-content-center">
+          <button type="submit" (click)="assignNewRole('super')" class="btn btn-info">Assign selected SuperAdmin</button>
+          <button type="submit" (click)="assignNewRole('group')" class="btn btn-info">Assign selected GroupAdmin</button>
+
+        </div>
+
+
+        <p>{{ userList.length == 0 ? 'No other users yet' : '' }}</p>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">username</th>
+                <th scope="col">Super Admin</th>
+                <th scope="col">Group Admin</th>
+                <th scope="col">Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of userList">
+                <td class="text-center"><input *ngIf="editMode" type="checkbox" name="{{user.userName}}" id="{{user.userName}}" class="form-check-input" [(ngModel)]="user.selected"></td>
+                <td class="text-center"><label for="{{user.userName}}">{{user.userName}}</label></td>
+                <td class="text-center"><span class="badge badge-primary badge-pill">{{user.role0}}</span></td>
+                <td class="text-center"><span class="badge badge-info badge-pill">{{user.role1}}</span></td>
+                <td class="text-center"><button *ngIf="editMode" type="submit" (click)="removeUsers(user.userName)" class="btn btn-danger removeButton">-</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="cancel()">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
