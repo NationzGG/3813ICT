@@ -1,13 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\server\\image",
-    "\\server\\initialData",
-    "\\src",
-    "\\src\\app",
-    "\\src\\app\\channel",
-    "\\src\\assets"
+    ""
   ],
-  "SelectedNode": "\\src\\app\\channel\\channel.component.html",
+  "SelectedNode": "\\package.json",
   "PreviewInSolutionExplorer": false
 }
